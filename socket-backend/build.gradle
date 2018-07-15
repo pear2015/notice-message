@@ -1,0 +1,15 @@
+group 'com.gs.message.notice'
+archivesBaseName = 'socket-backend'
+configurations {
+    //每次build时检查更新
+    all { resolutionStrategy.cacheChangingModulesFor(0, "seconds") }
+}
+
+dependencies {
+    compile project(":socket-common")
+    compile project(":socket-message")
+    compile project(":socket-webapi")
+    compile project(":socket-service")
+}
+apply from: "../scripts/gradle/publish.gradle"
+apply from: "../scripts/gradle/warbuild.gradle"

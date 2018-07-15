@@ -1,0 +1,54 @@
+apply plugin: 'maven-publish'
+
+//打包源代码
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            artifact sourceJar {
+                classifier "sources"
+            }
+        }
+    }
+    repositories {
+        maven {
+            if (project.version.endsWith("SNAPSHOT")) {
+                url "http://172.18.24.51:8081/nexus/content/repositories/snapshots/"
+            } else {
+                url "http://172.18.24.51:8081/nexus/content/repositories/Releases/"
+            }
+            credentials {
+                username 'deployment'
+                password '123456'
+            }
+        }
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            //远程releases库
+            repository(url: "http://172.18.24.51:8081/nexus/content/repositories/Releases/") {
+                authentication(userName: "deployment", password: "123456")
+            }
+
+            //远程snapshot库
+            snapshotRepository(url: "http://172.18.24.51:8081/nexus/content/repositories/snapshots/") {
+                authentication(userName: "deployment", password: "123456")
+            }
+
+            pom.project {
+                name = "message-notice"
+                packaging = "war"
+                description = "message-notice"
+                url = "http://172.18.3.103/aneid/message-Notice"  //可选
+            }
+        }
+    }
+}

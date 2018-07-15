@@ -1,0 +1,10 @@
+group 'com.gs.message.notice'
+archivesBaseName = 'socket-message'
+
+apply from: "../scripts/gradle/publish.gradle"
+dependencies{
+    // 依赖包
+    compile project(":socket-common")
+    compile("com.corundumstudio.socketio:netty-socketio:1.7.12")
+    compile("redis.clients:jedis:2.9.0")
+}

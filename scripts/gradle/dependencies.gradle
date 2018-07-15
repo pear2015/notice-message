@@ -1,0 +1,62 @@
+//apply plugin: 'org.springframework.boot'
+
+def springBootVersion = "1.5.1.RELEASE"
+
+ext {
+    //定义版本号
+    springVersion = '4.2.4.RELEASE'
+}
+
+configurations {
+    // 所有需要忽略的包定义在此
+    all*.exclude group: 'commons-httpclient'
+    all*.exclude group: 'commons-logging'
+    all*.exclude group: 'commons-beanutils', module: 'commons-beanutils'
+    //每次build时检查更新 如果不需要可以屏蔽
+    //all { resolutionStrategy.cacheChangingModulesFor(0, "seconds") }
+}
+
+dependencies {
+    // tag::jetty[]
+    compile("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
+   // compile("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
+    //compile("org.springframework.boot:spring-boot-starter-jetty")
+    compile("org.springframework.boot:spring-boot-starter-aop:$springBootVersion")
+    compile("org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
+
+    compile('com.gsafety.springboot.common:gsafety-springboot-common:1.0.0-SNAPSHOT')
+
+    compile("io.springfox:springfox-swagger2:2.5.0")
+    compile("io.springfox:springfox-swagger-ui:2.5.0")
+
+    compile("net.logstash.logback:logstash-logback-encoder:4.8")
+
+    compile (
+            "org.springframework:spring-context:$springVersion",
+            "org.springframework:spring-orm:$springVersion",
+            "org.springframework:spring-webmvc:$springVersion",
+            "org.springframework:spring-tx:$springVersion",
+            "org.springframework:spring-aop:$springVersion",
+            "org.springframework:spring-aspects:$springVersion",
+            "org.springframework:spring-context-support:$springVersion",
+            "org.json:json:20160212",
+
+//            "org.slf4j:slf4j-api:1.7.21",
+//            "org.slf4j:jcl-over-slf4j:1.7.21",
+//            "ch.qos.logback:logback-classic:1.1.7",
+            "com.fasterxml.jackson.core:jackson-databind:2.3.1",
+            "javax.servlet:jstl:1.2",
+            "com.alibaba:fastjson:1.2.29"
+    )
+    // end::actuator[]
+
+    // 测试依赖
+    testCompile(
+            "org.springframework.boot:spring-boot-starter-test:$springBootVersion",
+            "org.springframework:spring-test:$springBootVersion",
+            "org.testng:testng:6.9.10",
+            'org.mockito:mockito-all:2.0.2-beta',
+            'org.powermock:powermock-module-testng:1.6.5',
+            'org.powermock:powermock-api-mockito:1.6.5'
+    )
+}

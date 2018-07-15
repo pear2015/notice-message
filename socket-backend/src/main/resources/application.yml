@@ -1,0 +1,53 @@
+# -----------------application:configs--------------------------
+# 1.spring configs (db...)
+# 2.app configs
+# 3.log configs
+# 4.common configs
+# 说明  消息服务部署分为 linux环境 docker 单容器  docker 集群
+# linux 环境 读取本机IP 外部可以访问 本服务采用的是 配置socket连接的ip
+# docker环境 读取容器的IP 外部访问不了   要 配置socket连接的ip
+# docker集群 服务配置对外访问了的ip 外部是可以访问  集群内部的socket连接的地址读取本机的ip
+# ---------------------------------------------------------------
+server:
+  port: 8081  #8080容器内部的端口(不是映射之后的端口)
+  context-path: /socket-server # /socket-server必须跟docker容器里面配置的项目名保持一致
+  send_msg_uri: /api/v1/message/send
+  client_status_uri: /api/v1/socket/client/status/
+  dateType: GMT+8   # GMT+8 是中国时区 GMT+1 安哥拉时区  根据各自时区配置
+
+
+#socket服务端口
+socket:
+  isSelectSwarm: false # 默认选择单容器的方式
+  host: 172.18.24.29  #非集群的情况下要配置ip docker内部容器的ip 外部是访问不了的
+  port: 9999
+#redis服务地址,端口
+jedis:
+  isSelectSwarm: false  # 默认选择集群方式
+  pool:
+    swarm: #集群模式
+       url: 172.18.24.1281:26379,172.18.24.1291:26379,172.18.24.1301:26379 # redis集群环境 ip+端口 依次以逗号分隔
+       masterName: mymaster
+    single: # 单容器模式
+       redisHost: 172.18.8.29
+       redisPort: 6379
+    config:
+       lockTimeOut: 1800000  #失效时间单位毫秒
+       inValidTime: 1800  #失效时间 单位秒
+       maxIdle: 300  #控制一个pool最多有多少个状态给idle的jedis实例
+       maxTotal: 1000 # 最大连接数
+       checkingIntervalSecs: 300 #检查空闲的时间 毫秒
+       evictableIdleTimeSecs: 300 #连接池中连接可空闲的时间 毫秒
+       maxWaitMills: 100000
+# log配置
+logging:
+  config: classpath:logback.xml
+
+# 种子工程扩展配置
+xseed:
+  url1: http://localhost:8666/test1
+  url2: http://localhost:8666/test2
+
+# app相关配置
+app:
+ language: zh-CN

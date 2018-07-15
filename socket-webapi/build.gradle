@@ -1,0 +1,19 @@
+group 'com.gs.message.notice'
+archivesBaseName = 'socket-webapi'
+
+apply from: "../scripts/gradle/publish.gradle"
+apply from: "../scripts/gradle/jacoco.gradle"
+
+configurations {
+    //每次build时检查更新
+    all { resolutionStrategy.cacheChangingModulesFor(0, "seconds") }
+}
+
+
+dependencies{
+    // 依赖模块
+    compile project(":socket-common")
+    compile project(":socket-message")
+    compile project(":socket-service")
+
+}

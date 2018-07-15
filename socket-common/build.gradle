@@ -1,0 +1,8 @@
+group 'com.gs.message.notice'
+archivesBaseName = 'socket-common'
+
+apply from: "../scripts/gradle/publish.gradle"
+
+dependencies{
+    // 依赖模块
+}
